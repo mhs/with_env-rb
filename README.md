@@ -1,8 +1,8 @@
 # WithEnv
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/with_env`. To experiment with that code, run `bin/console` for an interactive prompt.
+WithEnv is an extremely small helper module for executing code with ENV variables. It exists because
+I got tired of re-writing or copying over a #with_env helper method for the 131st time.
 
-TODO: Delete this and the text above, and describe your gem
 
 ## Installation
 
@@ -22,7 +22,19 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```
+include WithEnv
+
+with_env("FOO" => "BAR") do
+  `echo $FOO` # => "BAR\n"
+  ENV["FOO"] # => "BAR"
+end
+
+# The ENV has been restored to what it was before the
+# above with_env block, so FOO no longer exists
+`echo $FOO` # => "\n"
+ENV.has_key?("FOO") # => false
+```
 
 ## Development
 
@@ -32,10 +44,9 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/with_env.
+Bug reports and pull requests are welcome on GitHub at https://github.com/mhs/with_env-rb.
 
 
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-
