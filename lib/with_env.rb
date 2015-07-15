@@ -4,10 +4,18 @@ module WithEnv
   extend self
 
   def with_env(env, &blk)
-    before = env.inject({}) { |h, (k, _)| h[k] = ENV[k]; h }
+    before = ENV.to_h.dup
     env.each { |k, v| ENV[k] = v }
     yield
   ensure
-    before.each { |k, v| ENV[k] = v }
+    ENV.replace(before)
+  end
+
+  def without_env(*keys, &blk)
+    before = ENV.to_h.dup
+    keys.flatten.each { |k| ENV.delete(k) }
+    yield
+  ensure
+    ENV.replace(before)
   end
 end
